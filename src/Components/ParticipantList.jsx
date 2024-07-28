@@ -16,6 +16,7 @@ const ParticipantList = () => {
   const [participants, setParticipants] = useState([]);
   const [selectedCompetition, setSelectedCompetition] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,6 +30,7 @@ const ParticipantList = () => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching participants: ", error);
+        setError("Error fetching participants. Please try again later.");
         setLoading(false);
       }
     };
@@ -58,6 +60,8 @@ const ParticipantList = () => {
       </div>
       {loading ? (
         <p className="text-center">Loading...</p>
+      ) : error ? (
+        <p className="text-center text-red-600">{error}</p>
       ) : filteredParticipants.length === 0 ? (
         <p className="text-center">Belum ada nama yang terdaftar</p>
       ) : (
