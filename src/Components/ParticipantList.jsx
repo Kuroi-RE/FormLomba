@@ -66,7 +66,7 @@ const ParticipantList = () => {
       ) : filteredParticipants.length === 0 ? (
         <p className="text-center">Belum ada nama yang terdaftar</p>
       ) : (
-        <ul>
+        <ul className="colored_table">
           {filteredParticipants.map((participant) => (
             <li key={participant.id} className="mb-2 p-2 border rounded">
               <p className="text-lg font-bold">Nama: {participant.name}</p>
