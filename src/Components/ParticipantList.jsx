@@ -29,8 +29,8 @@ const ParticipantList = () => {
         setParticipants(participantsList);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching participants: ", error);
-        setError("Error fetching participants. Please try again later.");
+        console.error("Ada sebuah masalah ketika Fetching Data: ", error);
+        setError("ada masalah saat fetching data. Coba lagi nanti.");
         setLoading(false);
       }
     };
@@ -45,7 +45,7 @@ const ParticipantList = () => {
     : participants;
 
   return (
-    <div className="max-w-5xl mx-auto mt-10 p-6 bg-white text-gray-800 rounded shadow-md w-full md:w-1/2">
+    <div className="max-w-5xl mx-auto mt-10 p-6 glass sm:bg-white text-gray-800 rounded shadow-md min-h-72 w-full md:w-1/2">
       <h2 className="text-2xl font-bold mb-4 text-center">Daftar Peserta</h2>
       <div className="mb-4">
         <Select
@@ -55,7 +55,8 @@ const ParticipantList = () => {
           className="basic-select"
           classNamePrefix="select"
           isClearable
-          placeholder="Filter by competition"
+          isSearchable={false}
+          placeholder="List Peserta Berdasarkan Lomba"
         />
       </div>
       {loading ? (

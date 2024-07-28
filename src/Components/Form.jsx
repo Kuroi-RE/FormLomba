@@ -1,12 +1,12 @@
 import { useState, useContext } from "react";
 import Select from "react-select";
-import { FiFlag } from "react-icons/fi";
 import garudaImage from "../assets/pancasilaImage.png";
 import { ParticipantContext } from "../Contexts/ParticipantContext";
 import { db } from "../firebase.js";
 import { collection, addDoc } from "firebase/firestore";
 
 const competitions = [
+  { value: "compitition0", label: "Semua Lomba" },
   { value: "competition1", label: "Keprukan" },
   { value: "competition2", label: "Balap Karung" },
   { value: "competition3", label: "Futsal" },
@@ -43,7 +43,7 @@ const CompetitionForm = () => {
         setName("");
         setSelectedCompetitions([]);
       } catch (error) {
-        console.error("Error adding document: ", error);
+        console.error("Error saat mengupload data: ", error);
       }
     } else {
       setNotification("Silakan lengkapi form dengan benar.");
@@ -51,13 +51,13 @@ const CompetitionForm = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row max-w-5xl mx-auto mt-10 bg-white text-gray-800 p-6 rounded shadow-md relative">
+    <div className="flex flex-col md:flex-row max-w-5xl mx-auto mt-10 glass sm:bg-white text-gray-800 p-6 rounded shadow-md relative">
       <div className="w-full md:w-1/2 p-4">
         <div className="relative z-10">
           <div className="flex items-center justify-center mb-4">
-            <FiFlag size={40} className="text-red-600" />
+            <img src={garudaImage} width={100} alt="" />
             <h1 className="text-3xl font-bold ml-2 text-red-600 text-center md:text-left">
-              Pendaftaran Lomba Kemerdekaan
+              Pendaftaran Lomba 17 Agustus
             </h1>
           </div>
           {notification && (
@@ -112,14 +112,17 @@ const CompetitionForm = () => {
                 onChange={setSelectedCompetitions}
                 className="basic-multi-select"
                 classNamePrefix="select"
+                placeholder="Pilih Lomba"
+                isSearchable={false}
                 maxMenuHeight={150}
                 closeMenuOnSelect={false}
+                required
               />
             </div>
             <div className="flex items-center justify-between">
               <button
                 type="submit"
-                className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-10 rounded focus:outline-none focus:shadow-outline"
+                className="bg-red-600 hover:bg-red-700 text-white font-bold w-full py-3 rounded focus:outline-none focus:shadow-outline"
               >
                 Daftar
               </button>

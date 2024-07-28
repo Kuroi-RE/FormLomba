@@ -9,10 +9,10 @@ const App = () => {
     <ParticipantProvider>
       <Router>
         <div
-          className="min-h-screen flex flex-col items-center justify-center p-4 bg-cover bg-center"
+          className="min-h-screen flex flex-col items-center justify-center p-4 bg-contain bg-center"
           style={{ backgroundImage: `url(${background})` }}
         >
-          <nav className="w-full fixed top-0 sm:top-12 bg-red-600 p-4 text-white mb-10">
+          <nav className="w-full z-10 fixed top-0 sm:top-12 bg-red-600 p-4 text-white mb-10">
             <ul className="flex justify-center space-x-4">
               <li>
                 <Link
