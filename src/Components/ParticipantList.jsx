@@ -1,15 +1,15 @@
-// src/components/ParticipantList.js
 import { useState, useEffect } from "react";
 import Select from "react-select";
 import { db } from "../firebase.js";
 import { collection, getDocs } from "firebase/firestore";
 
 const competitionOptions = [
+  { value: "all", label: "Semua Lomba" },
   { value: "Keprukan", label: "Keprukan" },
   { value: "Balap Karung", label: "Balap Karung" },
   { value: "Futsal", label: "Futsal" },
   { value: "Voli", label: "Voli" },
-  { value: "Lomba 2", label: "Lomba 2" },
+  { value: "Makan Kerupuk", label: "Makan Kerupuk" },
 ];
 
 const ParticipantList = () => {
@@ -30,7 +30,7 @@ const ParticipantList = () => {
         setLoading(false);
       } catch (error) {
         console.error("Ada sebuah masalah ketika Fetching Data: ", error);
-        setError("ada masalah saat fetching data. Coba lagi nanti.");
+        setError("Ada masalah saat fetching data. Coba lagi nanti.");
         setLoading(false);
       }
     };
@@ -38,11 +38,12 @@ const ParticipantList = () => {
     fetchData();
   }, []);
 
-  const filteredParticipants = selectedCompetition
-    ? participants.filter((participant) =>
-        participant.competitions.includes(selectedCompetition.label)
-      )
-    : participants;
+  const filteredParticipants =
+    selectedCompetition && selectedCompetition.value !== "all"
+      ? participants.filter((participant) =>
+          participant.competitions.includes(selectedCompetition.label)
+        )
+      : participants;
 
   return (
     <div className="max-w-5xl mx-auto mt-10 p-6 glass sm:bg-white text-gray-800 rounded shadow-md min-h-72 w-full md:w-1/2">

@@ -3,6 +3,7 @@ import CompetitionForm from "./Components/Form.jsx";
 import ParticipantList from "./Components/ParticipantList";
 import { ParticipantProvider } from "./Contexts/ParticipantContext";
 import background from "./assets/bg.png";
+import SchedulePage from "./Components/Schedule.jsx";
 
 const App = () => {
   return (
@@ -12,7 +13,7 @@ const App = () => {
           className="min-h-screen flex flex-col items-center justify-center p-4 bg-contain bg-center"
           style={{ backgroundImage: `url(${background})` }}
         >
-          <nav className="w-full z-10 fixed top-0 sm:top-12 bg-red-600 p-4 text-white mb-10">
+          <nav className="w-full z-10 absolute top-0 bg-red-600 p-4 text-white mb-10">
             <ul className="flex justify-center space-x-4">
               <li>
                 <Link
@@ -30,11 +31,20 @@ const App = () => {
                   Daftar Peserta
                 </Link>
               </li>
+              <li>
+                <Link
+                  className="font-bold hover:text-blue-500 transition-all delay-150"
+                  to="/schedule"
+                >
+                  Jadwal Lomba
+                </Link>
+              </li>
             </ul>
           </nav>
           <Routes>
             <Route path="/" element={<CompetitionForm />} />
             <Route path="/participants" element={<ParticipantList />} />
+            <Route path="/schedule" element={<SchedulePage />} />
           </Routes>
         </div>
       </Router>

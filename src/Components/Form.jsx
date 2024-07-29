@@ -1,17 +1,18 @@
 import { useState, useContext } from "react";
 import Select from "react-select";
 import garudaImage from "../assets/pancasilaImage.png";
+import icons_org from "../assets/icons-org.png";
 import { ParticipantContext } from "../Contexts/ParticipantContext";
 import { db } from "../firebase.js";
 import { collection, addDoc } from "firebase/firestore";
 
 const competitions = [
-  { value: "compitition0", label: "Semua Lomba" },
+  { value: "competition0", label: "Semua Lomba" },
   { value: "competition1", label: "Keprukan" },
   { value: "competition2", label: "Balap Karung" },
   { value: "competition3", label: "Futsal" },
   { value: "competition4", label: "Voli" },
-  { value: "competition5", label: "Lomba 2" },
+  { value: "competition5", label: "Makan Kerupuk" },
 ];
 
 const capitalize = (text) => {
@@ -23,6 +24,14 @@ const CompetitionForm = () => {
   const [selectedCompetitions, setSelectedCompetitions] = useState([]);
   const [notification, setNotification] = useState("");
   const { addParticipant } = useContext(ParticipantContext);
+
+  const handleCompetitionChange = (selectedOptions) => {
+    if (selectedOptions.some((option) => option.value === "competition0")) {
+      setSelectedCompetitions(competitions.slice(1));
+    } else {
+      setSelectedCompetitions(selectedOptions);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -109,7 +118,7 @@ const CompetitionForm = () => {
                 isMulti
                 options={competitions}
                 value={selectedCompetitions}
-                onChange={setSelectedCompetitions}
+                onChange={handleCompetitionChange}
                 className="basic-multi-select"
                 classNamePrefix="select"
                 placeholder="Pilih Lomba"
@@ -132,7 +141,7 @@ const CompetitionForm = () => {
       </div>
       <div className="w-full md:w-1/2 flex items-center justify-center mt-4 md:mt-0">
         <img
-          src={garudaImage}
+          src={icons_org}
           alt="Patriot"
           className="w-full h-auto max-w-xs md:max-w-md lg:max-w-lg"
         />
