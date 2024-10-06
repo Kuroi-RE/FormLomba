@@ -4,6 +4,7 @@ import ParticipantList from "./Components/ParticipantList";
 import { ParticipantProvider } from "./Contexts/ParticipantContext";
 import background from "./assets/bg.png";
 import SchedulePage from "./Components/Schedule.jsx";
+import Admin from "./Components/Admin.jsx";
 
 const App = () => {
   return (
@@ -45,6 +46,7 @@ const App = () => {
             <Route path="/" element={<CompetitionForm />} />
             <Route path="/participants" element={<ParticipantList />} />
             <Route path="/schedule" element={<SchedulePage />} />
+            <Route path="/a/admin" element={<Admin />} />
           </Routes>
         </div>
       </Router>

@@ -1,82 +1,88 @@
-import { useState, useEffect } from "react";
-import Select from "react-select";
-import { db } from "../firebase.js";
+import React, { useEffect, useState } from "react";
+import { db } from "../firebase.js"; // Pastikan path ini sesuai dengan konfigurasi Firebase Anda
 import { collection, getDocs } from "firebase/firestore";
-
-const competitionOptions = [
-  { value: "all", label: "Semua Lomba" },
-  { value: "Keprukan", label: "Keprukan" },
-  { value: "Balap Karung", label: "Balap Karung" },
-  { value: "Futsal", label: "Futsal" },
-  { value: "Voli", label: "Voli" },
-  { value: "Makan Kerupuk", label: "Makan Kerupuk" },
-];
+import Select from "react-select";
 
 const ParticipantList = () => {
   const [participants, setParticipants] = useState([]);
-  const [selectedCompetition, setSelectedCompetition] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [filteredParticipants, setFilteredParticipants] = useState([]);
+  const [filter, setFilter] = useState(null);
+  const [notification, setNotification] = useState("");
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchParticipants = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, "participants"));
-        const participantsList = querySnapshot.docs.map((doc) => ({
+        const participantsCollection = collection(db, "participants");
+        const participantsSnapshot = await getDocs(participantsCollection);
+        const participantsList = participantsSnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
-        setParticipants(participantsList);
-        setLoading(false);
+
+        // Check if participantsList is valid
+        if (participantsList.length === 0) {
+          setNotification("Belum ada nama yang terdaftar");
+        } else {
+          setParticipants(participantsList);
+          setFilteredParticipants(participantsList);
+        }
       } catch (error) {
-        console.error("Ada sebuah masalah ketika Fetching Data: ", error);
-        setError("Ada masalah saat fetching data. Coba lagi nanti.");
-        setLoading(false);
+        console.error("Error fetching participants: ", error);
+        setNotification("Gagal memuat data peserta.");
       }
     };
 
-    fetchData();
+    fetchParticipants();
   }, []);
 
-  const filteredParticipants =
-    selectedCompetition && selectedCompetition.value !== "all"
-      ? participants.filter((participant) =>
-          participant.competitions.includes(selectedCompetition.label)
+  useEffect(() => {
+    if (filter) {
+      setFilteredParticipants(
+        participants.filter((participant) =>
+          participant.competitions.includes(filter.label)
         )
-      : participants;
+      );
+    } else {
+      setFilteredParticipants(participants);
+    }
+  }, [filter, participants]);
+
+  const competitionOptions = [
+    { value: "competition0", label: "Semua Lomba" },
+    { value: "competition1", label: "Keprukan" },
+    { value: "competition2", label: "Balap Karung" },
+    { value: "competition3", label: "Futsal" },
+    { value: "competition4", label: "Voli" },
+    { value: "competition5", label: "Makan Kerupuk" },
+  ];
 
   return (
-    <div className="max-w-5xl mx-auto mt-10 p-6 glass sm:bg-white text-gray-800 rounded shadow-md min-h-72 w-full md:w-1/2">
+    <div className="max-w-5xl mx-auto mt-10 p-6 bg-white rounded shadow-md">
       <h2 className="text-2xl font-bold mb-4 text-center">Daftar Peserta</h2>
-      <div className="mb-4">
+      <div className="mb-6">
         <Select
           options={competitionOptions}
-          value={selectedCompetition}
-          onChange={setSelectedCompetition}
-          className="basic-select"
+          onChange={setFilter}
+          placeholder="Pilih Lomba"
+          className="basic-single"
           classNamePrefix="select"
-          isClearable
-          isSearchable={false}
-          placeholder="List Peserta Berdasarkan Lomba"
         />
       </div>
-      {loading ? (
-        <p className="text-center">Loading...</p>
-      ) : error ? (
-        <p className="text-center text-red-600">{error}</p>
-      ) : filteredParticipants.length === 0 ? (
-        <p className="text-center">Belum ada nama yang terdaftar</p>
-      ) : (
-        <ul className="colored_table">
+      {notification && (
+        <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative mb-4">
+          {notification}
+        </div>
+      )}
+      {filteredParticipants.length > 0 ? (
+        <ul className="list-disc pl-5">
           {filteredParticipants.map((participant) => (
-            <li key={participant.id} className="mb-2 p-2 border rounded">
-              <p className="text-lg font-bold">Nama: {participant.name}</p>
-              <p className="text-sm">
-                Lomba: {participant.competitions.join(", ")}
-              </p>
+            <li key={participant.id} className="mb-2">
+              {participant.name} - {participant.competitions.join(", ")}
             </li>
           ))}
         </ul>
+      ) : (
+        <p className="text-center">Belum ada nama yang terdaftar</p>
       )}
     </div>
   );

@@ -1,20 +1,12 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import Select from "react-select";
 import garudaImage from "../assets/pancasilaImage.png";
 import icons_org from "../assets/icons-org.png";
 import { ParticipantContext } from "../Contexts/ParticipantContext";
 import { db } from "../firebase.js";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs } from "firebase/firestore";
 
-const competitions = [
-  { value: "competition0", label: "Semua Lomba" },
-  { value: "competition1", label: "Keprukan" },
-  { value: "competition2", label: "Balap Karung" },
-  { value: "competition3", label: "Futsal" },
-  { value: "competition4", label: "Voli" },
-  { value: "competition5", label: "Makan Kerupuk" },
-];
-
+// Fungsi untuk kapitalisasi teks
 const capitalize = (text) => {
   return text.replace(/\b\w/g, (char) => char.toUpperCase());
 };
@@ -23,11 +15,29 @@ const CompetitionForm = () => {
   const [name, setName] = useState("");
   const [selectedCompetitions, setSelectedCompetitions] = useState([]);
   const [notification, setNotification] = useState("");
+  const [competitionOptions, setCompetitionOptions] = useState([]);
   const { addParticipant } = useContext(ParticipantContext);
 
+  // Fetch data lomba dari Firestore
+  useEffect(() => {
+    const fetchCompetitions = async () => {
+      const querySnapshot = await getDocs(collection(db, "competitions"));
+      const competitionsList = querySnapshot.docs.map((doc) => ({
+        value: doc.id,
+        label: doc.data().name,
+      }));
+      setCompetitionOptions([
+        { value: "all", label: "Semua Lomba" },
+        ...competitionsList,
+      ]);
+    };
+
+    fetchCompetitions();
+  }, []);
+
   const handleCompetitionChange = (selectedOptions) => {
-    if (selectedOptions.some((option) => option.value === "competition0")) {
-      setSelectedCompetitions(competitions.slice(1));
+    if (selectedOptions.some((option) => option.value === "all")) {
+      setSelectedCompetitions(competitionOptions.slice(1));
     } else {
       setSelectedCompetitions(selectedOptions);
     }
@@ -64,7 +74,7 @@ const CompetitionForm = () => {
       <div className="w-full md:w-1/2 p-4">
         <div className="relative z-10">
           <div className="flex items-center justify-center mb-4">
-            <img src={garudaImage} width={100} alt="" />
+            <img src={garudaImage} width={100} alt="Garuda" />
             <h1 className="text-3xl font-bold ml-2 text-red-600 text-center md:text-left">
               Pendaftaran Lomba 17 Agustus
             </h1>
@@ -86,7 +96,7 @@ const CompetitionForm = () => {
                   viewBox="0 0 20 20"
                 >
                   <title>Close</title>
-                  <path d="M14.348 5.652a.5.5 0 00-.707 0L10 9.293 6.36 5.652a.5.5 0 00-.707.707L9.293 10l-3.64 3.64a.5.5 0 00.707.707L10 10.707l3.64 3.64a.5.5 0 00.707-.707L10.707 10l3.64-3.64a.5.5 0 000-.707z" />
+                  <path d="M14.348 5.652a.5.5 0 00-.707 0L10 9.293 6.36 5.652a.5.5 0 00-.707.707L9.293 10l-3.64 3.64a.5.5 0 00.707.707L10 10.707l3.64-3.64a.5.5 0 000-.707z" />
                 </svg>
               </button>
             </div>
@@ -98,7 +108,7 @@ const CompetitionForm = () => {
               </label>
               <input
                 type="text"
-                autoSave="false"
+                autoComplete="off"
                 id="name"
                 value={name}
                 onChange={(e) => setName(capitalize(e.target.value))}
@@ -116,7 +126,7 @@ const CompetitionForm = () => {
               <Select
                 id="competitions"
                 isMulti
-                options={competitions}
+                options={competitionOptions}
                 value={selectedCompetitions}
                 onChange={handleCompetitionChange}
                 className="basic-multi-select"
@@ -142,7 +152,7 @@ const CompetitionForm = () => {
       <div className="w-full md:w-1/2 flex items-center justify-center mt-4 md:mt-0">
         <img
           src={icons_org}
-          alt="Patriot"
+          alt="Icons"
           className="w-full h-auto max-w-xs md:max-w-md lg:max-w-lg"
         />
       </div>
