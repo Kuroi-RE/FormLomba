@@ -47,6 +47,9 @@ const App = () => {
             <Route path="/participants" element={<ParticipantList />} />
             <Route path="/schedule" element={<SchedulePage />} />
             <Route path="/a/admin" element={<Admin />} />
+            <Route path="*">
+              <h1>404 Not Found</h1>
+            </Route>
           </Routes>
         </div>
       </Router>
