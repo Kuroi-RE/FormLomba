@@ -1,8 +1,14 @@
-# React + Vite
+# Form Pendaftaran Sederhana 📝
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Project FullStack sederhana untuk form pendaftaran peserta lomba
 
-Currently, two official plugins are available:
+## Feature 🚀
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- User
+  - Pendaftaran lomba
+  - List peserta lomba
+  - Jadwal lomba
+- Admin
+  - Menambahkan lomba
+  - Menambahkan jadawal lomba
+  - Menghapus peserta lomba
