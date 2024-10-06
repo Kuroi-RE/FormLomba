@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import Select from "react-select";
 import garudaImage from "../assets/pancasilaImage.png";
-import icons_org from "../assets/icons-org.png";
+import icons_org from "../assets/pancasilaImage.png";
 import { ParticipantContext } from "../Contexts/ParticipantContext";
 import { db } from "../firebase.js";
 import { collection, addDoc, getDocs } from "firebase/firestore";
